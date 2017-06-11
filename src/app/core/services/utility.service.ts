@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router } from "@angular/router/router";
-import { Http } from "@angular/http/http";
+import { Router } from "@angular/router";
+import { Http } from "@angular/http";
 import { AuthenService } from "app/core/services/authen.service";
 import { UrlConstants } from "app/core/common/url.constants";
 
