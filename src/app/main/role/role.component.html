@@ -2,7 +2,6 @@
   <div class="title_left">
     <h3>Danh sách </h3>
   </div>
-
   <div class="title_right">
     <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
       <div class="input-group">
@@ -14,15 +13,14 @@
     </div>
   </div>
 </div>
-
 <div class="clearfix"></div>
-
 <div class="row">
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Các quyền <small></small></h2>
+        <h2>Các quyền </h2>
         <ul class="nav navbar-right panel_toolbox">
+          <li><button class="btn btn-success" (click)="showAddEditModal()">Thêm mới</button></li>
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
           </li>
           <li class="dropdown">
@@ -40,12 +38,10 @@
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
-
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>No</th>
-              <th>Mã</th>
+              <th>STT</th>
               <th>Tên quyền</th>
               <th>Mô tả</th>
               <th>Thao tác</th>
@@ -54,7 +50,6 @@
           <tbody>
             <tr *ngFor="let role of roles; let i=index">
               <th scope="row">{{i+1}}</th>
-              <td>{{role.Id}}</td>
               <td>{{role.Name}}</td>
               <td>{{role.Description}}</td>
               <td>
@@ -64,13 +59,61 @@
             </tr>
           </tbody>
         </table>
-        <div class="col-md-6">
-          <pagination  (pageChanged)="pageChanged($event)" [totalItems]="totalRows" [itemsPerPage]="pageSize" [(ngModel)]="pageIndex" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
-            [rotate]="false" (numPages)="numPages = $event"></pagination>
+        <div class="col-md-12">
+          <div class="col-md-10">
+            <pagination (pageChanged)="pageChanged($event)" [totalItems]="totalRows" [itemsPerPage]="pageSize" [(ngModel)]="pageIndex"
+              [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (numPages)="numPages = $event"></pagination>
+          </div>
+          <div class="col-md-2">
+            <pre class="card card-block card-header">Trang: {{pageIndex}} / {{numPages}}</pre>
+          </div>
         </div>
-        <pre class="card card-block card-header">Page: {{pageIndex}} / {{numPages}}</pre>
       </div>
     </div>
   </div>
-
 </div>
+
+<!--Modal add/edit-->
+<div bsModal #addEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Thêm và sửa quyền</h4>
+        <button type="button" class="close pull-right" (click)="addEditModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <br />
+        <form #addEditForm="ngForm" *ngIf="entity" (ngSubmit)="addEditRole(addEditForm.valid)" novalidate data-parsley-validate class="form-horizontal form-label-left">
+          <input type="hidden" [(ngModel)]="entity.Id" name="id" />
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Tên quyền </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" #name="ngModel" [(ngModel)]="entity.Name" required minlength="3" name="name" class="form-control">
+              <div *ngIf="name.errors && (name.dirty || name.touched)">
+                <span [hidden]="!name.errors.minlength" class="text-danger">Tên ít nhất là 3 ký tự</span>
+                <span [hidden]="!name.errors.required" class="text-danger">Bạn phải nhập tên quyền</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Mô tả </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <textarea class="form-control" #description="ngModel" required [(ngModel)]="entity.Description" name="description" rows="3"></textarea>
+              <span [hidden]="description.valid || !description.touched" class="text-danger">Bạn phải nhập mô tả</span>
+            </div>
+          </div>
+          <div class="ln_solid"></div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+              <button type="submit" (click)="addEditModal.hide()" class="btn btn-primary">Hủy bỏ</button>
+              <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
