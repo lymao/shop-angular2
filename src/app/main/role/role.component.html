@@ -64,6 +64,11 @@
             </tr>
           </tbody>
         </table>
+        <div class="col-md-6">
+          <pagination  (pageChanged)="pageChanged($event)" [totalItems]="totalRows" [itemsPerPage]="pageSize" [(ngModel)]="pageIndex" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
+            [rotate]="false" (numPages)="numPages = $event"></pagination>
+        </div>
+        <pre class="card card-block card-header">Page: {{pageIndex}} / {{numPages}}</pre>
       </div>
     </div>
   </div>
