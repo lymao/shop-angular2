@@ -4,40 +4,43 @@ import { SystemConstants } from 'app/core/common/system.constants';
 import { AuthenService } from 'app/core/services/authen.service';
 import { Observable } from 'rxjs/Observable';
 import { NotificationService } from "app/core/services/notification.service";
-import { Router } from "@angular/router/router";
+import { Router } from "@angular/router";
 import { UtilityService } from "app/core/services/utility.service";
 import { MessageConstants } from 'app/core/common/message.constants'
 
 
 @Injectable()
 export class DataService {
-
+  private headers: Headers;
   constructor(private _http: Http, private _router: Router, private _authenService: AuthenService,
-    private _notificationService: NotificationService, private _utilityService: UtilityService) { }
-  private heads: Headers;
+    private _notificationService: NotificationService, private _utilityService: UtilityService
+  ) {
+    this.headers = new Headers();
+    this.headers.append('Content-Type', 'application/json');
+  }
 
   get(uri: string) {
-    this.heads.delete("Authorization");
-    this.heads.append("Authorization", "Bearer" + this._authenService.getLoggedInUser().access_token);
-    return this._http.get(SystemConstants.BASE_API + uri, { headers: this.heads }).map(this.extractData);
+    this.headers.delete("Authorization");
+    this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
+    return this._http.get(SystemConstants.BASE_API + uri, { headers: this.headers }).map(this.extractData);
   }
 
   post(uri: string, data?: any) {
-    this.heads.delete("Authorization");
-    this.heads.append("Authorization", "Bearer" + this._authenService.getLoggedInUser().access_token);
-    return this._http.post(SystemConstants.BASE_API + uri, data, { headers: this.heads }).map(this.extractData);
+    this.headers.delete("Authorization");
+    this.headers.append("Authorization", "Bearer" + this._authenService.getLoggedInUser().access_token);
+    return this._http.post(SystemConstants.BASE_API + uri, data, { headers: this.headers }).map(this.extractData);
   }
 
   put(uri: string, data?: any) {
-    this.heads.delete("Authorization");
-    this.heads.append("Authorization", "Bearer" + this._authenService.getLoggedInUser().access_token);
-    return this._http.put(SystemConstants.BASE_API + uri, data, { headers: this.heads }).map(this.extractData);
+    this.headers.delete("Authorization");
+    this.headers.append("Authorization", "Bearer" + this._authenService.getLoggedInUser().access_token);
+    return this._http.put(SystemConstants.BASE_API + uri, data, { headers: this.headers }).map(this.extractData);
   }
 
   delete(uri: string, key: string, id: string) {
-    this.heads.delete("Authorization");
-    this.heads.append("Authorization", "Bearer" + this._authenService.getLoggedInUser().access_token);
-    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: this.heads }).map(this.extractData);
+    this.headers.delete("Authorization");
+    this.headers.append("Authorization", "Bearer" + this._authenService.getLoggedInUser().access_token);
+    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: this.headers }).map(this.extractData);
   }
 
   postFile(uri: string, data: any) {
