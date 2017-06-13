@@ -20,7 +20,7 @@
       <div class="x_title">
         <h2>Các quyền </h2>
         <ul class="nav navbar-right panel_toolbox">
-          <li><button class="btn btn-success" (click)="showAddEditModal()">Thêm mới</button></li>
+          <li><button class="btn btn-success" (click)="showAddModal()">Thêm mới</button></li>
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
           </li>
           <li class="dropdown">
@@ -53,7 +53,7 @@
               <td>{{role.Name}}</td>
               <td>{{role.Description}}</td>
               <td>
-                <button class="btn btn-primary"><i class="fa fa-pencil-square-o"></i></button>
+                <button class="btn btn-primary" (click)="showEditModal(role.Id)"><i class="fa fa-pencil-square-o"></i></button>
                 <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
               </td>
             </tr>
@@ -86,7 +86,7 @@
       </div>
       <div class="modal-body">
         <br />
-        <form #addEditForm="ngForm" *ngIf="entity" (ngSubmit)="addEditRole(addEditForm.valid)" novalidate data-parsley-validate class="form-horizontal form-label-left">
+        <form #addEditForm="ngForm" *ngIf="entity" (ngSubmit)="saveChange(addEditForm.valid)" novalidate data-parsley-validate class="form-horizontal form-label-left">
           <input type="hidden" [(ngModel)]="entity.Id" name="id" />
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Tên quyền </label>

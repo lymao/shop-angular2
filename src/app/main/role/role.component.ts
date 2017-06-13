@@ -11,9 +11,9 @@ import { MessageConstants } from '../../core/common/message.constants';
 })
 export class RoleComponent implements OnInit {
   @ViewChild('addEditModal') public addEditModal: ModalDirective;
-  constructor(private _dataService: DataService,private _notificationService:NotificationService) { }
+  constructor(private _dataService: DataService, private _notificationService: NotificationService) { }
   public pageIndex: number = 1;
-  public pageSize: number = 1;
+  public pageSize: number = 10;
   public filter: string = '';
   public totalRows: number;
   public maxSize: number;
@@ -42,13 +42,24 @@ export class RoleComponent implements OnInit {
     this.loadData();
   }
 
-  public showAddEditModal(): void {
-    this.entity={};
+  loadRole(id: any) {
+    this._dataService.get('/api/appRole/detail/' + id).subscribe((response: any) => {
+      this.entity = response;
+    }, error => this._dataService.handleError(error));
+  }
+
+  public showAddModal(): void {
+    this.entity = {};
     this.addEditModal.show();
   }
 
-  addEditRole(valid:boolean) {
-    if(valid){
+  public showEditModal(id: any): void {
+    this.loadRole(id);
+    this.addEditModal.show();
+  }
+
+  saveChange(valid: boolean) {
+    if (valid) {
       if (this.entity.Id == undefined) {
         this._dataService.post('/api/appRole/add', JSON.stringify(this.entity))
           .subscribe((response: any) => {
@@ -56,6 +67,13 @@ export class RoleComponent implements OnInit {
             this.addEditModal.hide();
             this._notificationService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
           }, error => this._dataService.handleError(error));
+      } else {
+        this._dataService.put('/api/appRole/update', JSON.stringify(this.entity))
+          .subscribe((response: any) => {
+            this.loadData();
+            this.addEditModal.hide();
+            this._notificationService.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
+          }, error => { this._dataService.handleError(error) });
       }
     }
   }
