@@ -31,7 +31,6 @@
          "../node_modules/jquery/dist/jquery.js",
         "../node_modules/bootstrap/dist/js/bootstrap.js",
         "../node_modules/fastclick/lib/fastclick.js",
-        "../node_modules/nprogress/nprogress.js",
         "../node_modules/alertifyjs/build/alertify.min.js"
       ],
       "environmentSource": "environments/environment.ts",

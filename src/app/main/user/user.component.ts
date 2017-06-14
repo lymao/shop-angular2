@@ -3,6 +3,7 @@ import { DataService } from '../../core/services/data.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../core/services/notification.service';
 import { MessageConstants } from '../../core/common/message.constants';
+import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 
 @Component({
   selector: 'app-user',
@@ -21,9 +22,19 @@ export class UserComponent implements OnInit {
   public users: any[];
 
   public entity: any;
+  public myRoles: string[] = [];
+  public allRoles: IMultiSelectOption[] = [];
+  public roles:any[];
+
+  public dateOptions: any = {
+    locale: { format: 'DD/MM/YYYY' },
+    alwaysShowCalendars: false,
+    singleDatePicker: true
+  };
 
   ngOnInit() {
     this.loadData();
+    this.loadRoles();
   }
 
   loadData() {
@@ -35,6 +46,15 @@ export class UserComponent implements OnInit {
         this.pageSize = response.PageSize;
         this.maxSize = 2;
       })
+  }
+
+  loadRoles() {
+    this._dataService.get('/api/appRole/getlistall').subscribe((response: any[]) => {
+      this.allRoles = [];
+      for (let role of response) {
+        this.allRoles.push({ id: role.Name, name: role.Description });
+      }
+    }, error => this._dataService.handleError(error));
   }
 
   public pageChanged(event: any): void {
@@ -87,6 +107,10 @@ export class UserComponent implements OnInit {
       this._notificationService.printSuccessMessage(MessageConstants.DELETED_OK_MSG);
       this.loadData();
     })
+  }
+
+  public selectGender(event) {
+    this.entity.Gender = event.target.value
   }
 
 }

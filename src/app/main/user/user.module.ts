@@ -6,6 +6,9 @@ import { ModalModule, PaginationModule } from 'ngx-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../core/services/data.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+import { Daterangepicker } from 'ng2-daterangepicker';
+import { EqualValidator } from './password.match.directive';
 
 export const userRountes: Routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -17,10 +20,12 @@ export const userRountes: Routes = [
     CommonModule,
     PaginationModule,
     FormsModule,
+    Daterangepicker,
+    MultiselectDropdownModule,
     ModalModule.forRoot(),
     RouterModule.forChild(userRountes)
   ],
-  declarations: [UserComponent],
+  declarations: [UserComponent,EqualValidator],
   providers: [DataService, NotificationService]
 })
 export class UserModule { }
