@@ -191,8 +191,8 @@
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthday">Ngày sinh</label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-              <input class="form-control" #birthday="ngModel" [(ngModel)]="entity.BirthDay" daterangepicker [options]="dateOptions" name="birthday"
-                id="birthday">
+              <input class="form-control" #birthday="ngModel" [(ngModel)]="entity.BirthDay" daterangepicker [options]="dateOptions"
+               name="birthday" id="birthday" (selected)="selectedDate($event)">
             </div>
           </div>
 
@@ -216,7 +216,7 @@
           <div class="ln_solid"></div>
           <div class="form-group">
             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-              <button type="submit" (click)="addEditModal.hide()" class="btn btn-primary">Hủy bỏ</button>
+              <button type="button" (click)="addEditModal.hide()" class="btn btn-primary">Hủy bỏ</button>
               <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
             </div>
           </div>

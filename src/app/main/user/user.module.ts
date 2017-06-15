@@ -25,7 +25,7 @@ export const userRountes: Routes = [
     ModalModule.forRoot(),
     RouterModule.forChild(userRountes)
   ],
-  declarations: [UserComponent,EqualValidator],
+  declarations: [UserComponent, EqualValidator],
   providers: [DataService, NotificationService]
 })
 export class UserModule { }

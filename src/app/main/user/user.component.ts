@@ -5,6 +5,7 @@ import { NotificationService } from '../../core/services/notification.service';
 import { MessageConstants } from '../../core/common/message.constants';
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 
+declare var moment: any;
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -24,17 +25,34 @@ export class UserComponent implements OnInit {
   public entity: any;
   public myRoles: string[] = [];
   public allRoles: IMultiSelectOption[] = [];
-  public roles:any[];
-
-  public dateOptions: any = {
-    locale: { format: 'DD/MM/YYYY' },
-    alwaysShowCalendars: false,
-    singleDatePicker: true
-  };
+  public roles: any[];
 
   ngOnInit() {
     this.loadData();
     this.loadRoles();
+  }
+
+  public dateOptions: any = {
+    // locale: { format: 'DD/MM/YYYY' }, // ko cần vì selectedDate() đã format
+    alwaysShowCalendars: false,
+    singleDatePicker: true,
+    showDropdowns: true,
+    opens: "left"
+  };
+  public selectedDate(value: any) {
+    this.entity.BirthDay = moment(value.start).format('DD/MM/YYYY');
+  }
+
+  public showAddModal(): void {
+    this.myRoles=[];
+    this.entity = {};
+    this.addEditModal.show();
+  }
+
+  public showEditModal(id: any): void {
+    this.myRoles=[];
+    this.loadUserDetail(id);
+    this.addEditModal.show();
   }
 
   loadData() {
@@ -62,24 +80,19 @@ export class UserComponent implements OnInit {
     this.loadData();
   }
 
-  loadUser(id: any) {
+  loadUserDetail(id: any) {
     this._dataService.get('/api/appUser/detail/' + id).subscribe((response: any) => {
       this.entity = response;
+      this.entity.BirthDay = moment(new Date(this.entity.BirthDay)).format('DD/MM/YYYY');
+      for (let role of this.entity.Roles) {
+        this.myRoles.push(role);
+      }
     }, error => this._dataService.handleError(error));
-  }
-
-  public showAddModal(): void {
-    this.entity = {};
-    this.addEditModal.show();
-  }
-
-  public showEditModal(id: any): void {
-    this.loadUser(id);
-    this.addEditModal.show();
   }
 
   saveChange(valid: boolean) {
     if (valid) {
+      this.entity.Roles=this.myRoles;
       if (this.entity.Id == undefined) {
         this._dataService.post('/api/appUser/add', JSON.stringify(this.entity))
           .subscribe((response: any) => {
