@@ -9,6 +9,7 @@ import { NotificationService } from '../../core/services/notification.service';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { EqualValidator } from './password.match.directive';
+import { UploadService } from '../../core/services/upload.service';
 
 export const userRountes: Routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -26,6 +27,6 @@ export const userRountes: Routes = [
     RouterModule.forChild(userRountes)
   ],
   declarations: [UserComponent, EqualValidator],
-  providers: [DataService, NotificationService]
+  providers: [DataService, NotificationService, UploadService]
 })
 export class UserModule { }

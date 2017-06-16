@@ -42,8 +42,8 @@ export class DataService {
     return this._http.delete(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: this.headers }).map(this.extractData);
   }
 
-  postFile(uri: string, data: any) {
-    let newHeader: Headers;
+  postFile(uri: string, data?: any) {
+    let newHeader = new Headers();
     newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
     return this._http.post(SystemConstants.BASE_API + uri, data, { headers: newHeader }).map(this.extractData);
   }
@@ -60,7 +60,7 @@ export class DataService {
       this._utilityService.navigateToLogin();
     }
     else {
-      let errMsg = (error.message) ? error.message :
+      let errMsg = (error._body) ? error._body :
         error.status ? `${error.status} - ${error.statusText}` : 'Lỗi hệ thống';
       this._notificationService.printErrorMessage(errMsg);
 
