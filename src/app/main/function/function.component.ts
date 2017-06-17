@@ -14,6 +14,7 @@ import { MessageConstants } from '../../core/common/message.constants';
 export class FunctionComponent implements OnInit {
   @ViewChild('addEditModal') public addEditModal: ModalDirective;
   @ViewChild(TreeComponent) public treeFunction: TreeComponent;
+  @ViewChild('permissionModal') public permissionModal: ModalDirective;
   constructor(private _dataService: DataService,
     private _utilityService: UtilityService,
     private _notificationService: NotificationService
@@ -24,6 +25,9 @@ export class FunctionComponent implements OnInit {
   public entity: any;
   public editFlag: boolean;
   public filter: string = '';
+
+  public _permission: any[];
+  public functionId: string;
 
   ngOnInit() {
     this.search();
@@ -48,6 +52,27 @@ export class FunctionComponent implements OnInit {
     this.loadFunctionDetail(id);
     this.editFlag = true;
     this.addEditModal.show();
+  }
+
+  showPermissionModal(id: any) {
+    this._dataService.get('/api/appRole/getAllPermission?functionId=' + id).subscribe((response: any[]) => {
+      this.functionId = id;
+      this._permission = response;
+      this.permissionModal.show();
+    }, error => { this._dataService.handleError(error) });
+  }
+
+  public savePermission(valid: boolean, _permission: any[]) {
+    if (valid) {
+      var data = {
+        Permissions: this._permission,
+        FunctionId: this.functionId
+      }
+      this._dataService.post('/api/appRole/savePermission', JSON.stringify(data)).subscribe((response: any) => {
+        this._notificationService.printSuccessMessage(response);
+        this.permissionModal.hide();
+      }, error => this._dataService.handleError(error));
+    }
   }
 
   loadFunctionDetail(id) {
@@ -89,7 +114,6 @@ export class FunctionComponent implements OnInit {
         this._dataService.handleError(error);
       });
     });
-
   }
 
 }
