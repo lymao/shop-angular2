@@ -102,7 +102,7 @@
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Mô tả </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <textarea class="form-control" #description="ngModel" required [(ngModel)]="entity.Description" name="description" rows="3"></textarea>
-              <span [hidden]="description.valid || description.touched" class="text-danger">Bạn phải nhập mô tả</span>
+              <span [hidden]="description.valid || description.pristine" class="text-danger">Bạn phải nhập mô tả</span>
             </div>
           </div>
           <div class="ln_solid"></div>

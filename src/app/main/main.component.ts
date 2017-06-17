@@ -10,7 +10,7 @@ import { LoggedInUser } from '../core/domain/loggedin.user';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
-
+  public baseFolder: string = SystemConstants.BASE_API;
   constructor(private utilityService: UtilityService, private authenService: AuthenService) { }
   public user: LoggedInUser;
   ngOnInit() {

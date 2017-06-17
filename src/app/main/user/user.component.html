@@ -57,7 +57,7 @@
               <td>{{user.UserName}}</td>
               <td>{{user.FullName}}</td>
               <td>{{user.Email}}</td>
-              <td>{{user.BirthDay}}</td>
+              <td>{{user.BirthDay | date:'dd/MM/yyyy'}}</td>
               <td>{{user.PhoneNumber}}</td>
               <td><img [src]="baseFolder + user.Avatar" class="small-image" width="128" /></td>
               <td>
