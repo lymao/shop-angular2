@@ -2,10 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../core/services/data.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../core/services/notification.service';
+import { AuthenService } from '../../core/services/authen.service';
+import { UtilityService } from '../../core/services/utility.service';
 import { MessageConstants } from '../../core/common/message.constants';
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import { UploadService } from '../../core/services/upload.service';
-import{SystemConstants}from '../../core/common/system.constants';
+import { SystemConstants } from '../../core/common/system.constants';
 
 declare var moment: any;
 @Component({
@@ -18,16 +20,22 @@ export class UserComponent implements OnInit {
   @ViewChild('avatar') avatar;
   constructor(private _dataService: DataService,
     private _notificationService: NotificationService,
-    private _uploadService: UploadService
-  ) { }
+    private _uploadService: UploadService,
+    private _utilityService: UtilityService,
+    public _authenService: AuthenService
+  ) {
+    if (_authenService.checkAccess('USER') == false) {
+      _utilityService.navigateToLogin();
+    }
+  }
   public pageIndex: number = 1;
-  public pageSize: number = 10;
+  public pageSize: number = 2;
   public filter: string = '';
   public totalRows: number;
   public maxSize: number;
   public numPages: number = 0;
   public users: any[];
-  public baseFolder:string=SystemConstants.BASE_API;
+  public baseFolder: string = SystemConstants.BASE_API;
 
   public entity: any;
   public myRoles: string[] = [];
@@ -70,6 +78,8 @@ export class UserComponent implements OnInit {
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.maxSize = 2;
+      },error=>{
+        this._dataService.handleError(error);
       })
   }
 
@@ -101,12 +111,14 @@ export class UserComponent implements OnInit {
     if (valid) {
       let fi = this.avatar.nativeElement;
       if (fi.files.length > 0) {
-        this._uploadService.postWithFile('/api/upload/saveImage?type='+fi.name, null, fi.files)
+        this._uploadService.postWithFile('/api/upload/saveImage?type=' + fi.name, null, fi.files)
           .then((imageUrl: string) => {
             this.entity.Avatar = imageUrl;
           }).then(() => {
             this.saveData();
           })
+      } else {
+        this.saveData();
       }
     }
   }
