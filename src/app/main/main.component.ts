@@ -17,9 +17,4 @@ export class MainComponent implements OnInit {
     this.user = this.authenService.getLoggedInUser();
   }
 
-  logout() {
-    localStorage.removeItem(SystemConstants.CURRENT_USER);
-    this.utilityService.navigateToLogin();
-  }
-
 }

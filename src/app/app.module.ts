@@ -7,6 +7,10 @@ import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { AuthGuard } from './core/guards/auth.guard';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { DataService } from './core/services/data.service';
+import { AuthenService } from './core/services/authen.service';
+import { NotificationService } from './core/services/notification.service';
+import { UtilityService } from './core/services/utility.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +23,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     RouterModule.forRoot(appRoutes),
     PaginationModule.forRoot()
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, DataService, AuthenService, NotificationService, UtilityService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
