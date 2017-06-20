@@ -4,7 +4,7 @@ import { ProductCategoryComponent } from './product-category.component';
 import { Routes, RouterModule } from '@angular/router';
 import { ModalModule } from 'ngx-bootstrap';
 import { TreeModule } from 'angular-tree-component';
-import{FormsModule}from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 
 export const routes: Routes = [
