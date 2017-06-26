@@ -41,6 +41,11 @@ export class ProductComponent implements OnInit {
   public checkedItems: any[];
   public check: any;
 
+  @ViewChild('imageManageModal') public imageManageModal: ModalDirective;
+  @ViewChild("imagePath") imagePath;
+  public imageEntity: any;
+  public productImages: any = [];
+
   ngOnInit() {
     this.loadData();
   }
@@ -116,7 +121,7 @@ export class ProductComponent implements OnInit {
 
   saveData() {
     if (this.entity.ID == undefined) {
-      this._dataService.post('/api/product/add', this.entity).subscribe((response: any) => {
+      this._dataService.post('/api/product/add', JSON.stringify(this.entity)).subscribe((response: any) => {
         this.loadData();
         this.addEditModal.hide();
         this._notificationService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
@@ -158,6 +163,45 @@ export class ProductComponent implements OnInit {
       }, error => {
         this._dataService.handleError(error);
       });
+    });
+  }
+
+  // Quản lý ảnh
+  showImageManage(id) {
+    this.imageEntity = { ProductId: id };
+    this.loadProductImages(id);
+    this.imageManageModal.show();
+  }
+
+  loadProductImages(id) {
+    this._dataService.get('/api/productImage/getall?productId=' + id).subscribe((response: any[]) => {
+      this.productImages = response;
+    }, error => {
+      this._dataService.handleError(error);
+    });
+  }
+
+  saveProductImage(valid: boolean) {
+    if (valid) {
+      let fi = this.imagePath.nativeElement;
+      if (fi.files.length > 0) {
+        this._uploadService.postWithFile('/api/upload/saveImage?type=product', null, fi.files).then((response: string) => {
+          this.imageEntity.Path = response;
+          this._dataService.post('/api/productImage/add', JSON.stringify(this.imageEntity)).subscribe((response: any) => {
+            this.loadProductImages(this.imageEntity.ProductId);
+            this._notificationService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
+          }, error => { this._dataService.handleError(error) });
+        }, error => { this._dataService.handleError(error) });
+      }
+    }
+  }
+
+  public deleteImage(id: number) {
+    this._notificationService.printConfirmationDialog(MessageConstants.CONFIRM_DELETE_MSG, () => {
+      this._dataService.delete('/api/productImage/delete', 'id', id.toString()).subscribe((response: any) => {
+        this._notificationService.printSuccessMessage(MessageConstants.DELETED_OK_MSG);
+        this.loadProductImages(this.imageEntity.ProductId);
+      }, error => this._dataService.handleError(error));
     });
   }
 
