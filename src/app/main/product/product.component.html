@@ -3,24 +3,29 @@
     <h3>Danh sách </h3>
   </div>
   <div class="title_right">
-    <div class="col-md-4 col-sm-6 col-xs-12 form-group">
-      <select class="form-control" name="filterCategoryID" [(ngModel)]="filterCategoryID">
-         <option value="">--Chọn danh mục--</option>
-         <option *ngFor="let x of productCategories" [value]="x.ID">{{x.Name}}</option>
-      </select>
+    <div class="col-md-3 col-sm-3 col-xs-12 form-group pull-right top_search">
+      <div class="input-group">
+        <button class="btn btn-default" type="button" (click)="reset()">Reset</button>
+        <button class="btn btn-danger" type="button" (click)="deleteMulti()">Xóa</button>
+      </div>
     </div>
+
     <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
       <div class="input-group">
         <input type="text" class="form-control" name="filter" [(ngModel)]="filter" (keyup.enter)="loadData()" placeholder="Từ khóa...">
         <span class="input-group-btn">
-        <button class="btn btn-default" type="button" (click)="loadData()">Tìm!</button>
-        </span>
+            <button class="btn btn-default" type="button" (click)="loadData()">Tìm!</button>
+          </span>
       </div>
     </div>
-    <div class="col-md-5 col-sm-6 col-xs-12 form-group">
-      <button class="btn btn-primary" type="button" (click)="search()">Tìm</button>
-      <button class="btn btn-default" type="button" (click)="reset()">Reset</button>
-      <button class="btn btn-danger" type="button" (click)="deleteMulti()">Xóa</button>
+
+    <div class="col-md-4 col-sm-4 col-xs-12 form-group">
+      <div class="input-group">
+        <select class="form-control" name="filterCategoryID" [(ngModel)]="filterCategoryID">
+         <option value="">--Chọn danh mục--</option>
+         <option *ngFor="let x of productCategories" [value]="x.ID">{{x.Name}}</option>
+        </select>
+      </div>
     </div>
   </div>
 </div>

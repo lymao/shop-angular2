@@ -30,7 +30,7 @@ export class ProductComponent implements OnInit {
   public entity: any;
   public totalRows: number;
   public pageIndex: number = 1;
-  public pageSize: number = 2;
+  public pageSize: number = 10;
   public maxSize: number;
   public numPages: number = 0;
   public pageDisplay: number = 10;
@@ -38,6 +38,8 @@ export class ProductComponent implements OnInit {
   public filterCategoryID: number;
   public products: any[];
   public productCategories: any[];
+  public checkedItems: any[];
+  public check: any;
 
   ngOnInit() {
     this.loadData();
@@ -57,6 +59,12 @@ export class ProductComponent implements OnInit {
       }, error => { this._dataService.handleError(error) });
   }
 
+  public reset() {
+    this.filter = '';
+    this.filterCategoryID = null;
+    this.loadData();
+  }
+
   private loadProductCategories() {
     this._dataService.get('/api/productCategory/getallhierachy').subscribe((response: any[]) => {
       this.productCategories = response;
@@ -73,7 +81,7 @@ export class ProductComponent implements OnInit {
   }
 
   showAddModal() {
-    this.entity = {Content:''};
+    this.entity = { Content: '' };
     this.addEditModal.show();
   }
 
@@ -124,6 +132,33 @@ export class ProductComponent implements OnInit {
 
   public keyupHandlerContentFunction(e: any) {
     this.entity.Content = e;
+  }
+
+  delete(id) {
+    this._notificationService.printConfirmationDialog(MessageConstants.CONFIRM_DELETE_MSG, () => {
+      this._dataService.delete('/api/product/delete', 'id', id).subscribe((response: any) => {
+        this.loadData();
+        this._notificationService.printSuccessMessage(MessageConstants.DELETED_OK_MSG);
+      }, error => {
+        this._dataService.handleError(error);
+      });
+    });
+  }
+
+  deleteMulti() {
+    this.checkedItems = this.products.filter(x => x.Checked);
+    var checkedIds = [];
+    for (var i = 0; i < this.checkedItems.length; i++) {
+      checkedIds.push(this.checkedItems[i]["ID"]);
+    }
+    this._notificationService.printConfirmationDialog(MessageConstants.CONFIRM_DELETE_MSG, () => {
+      this._dataService.delete('/api/product/deletemulti', 'checkedProducts', JSON.stringify(checkedIds)).subscribe((response: any) => {
+        this.loadData();
+        this._notificationService.printSuccessMessage(MessageConstants.DELETED_OK_MSG);
+      }, error => {
+        this._dataService.handleError(error);
+      });
+    });
   }
 
 }
