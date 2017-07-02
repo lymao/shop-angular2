@@ -1,0 +1,125 @@
+<div class="page-title">
+  <div class="title_left">
+    <h3>Danh sách </h3>
+  </div>
+  <div class="title_right">
+    <div class="row">
+      <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-right top_search">
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="filter" name="filter" (keyup.enter)="loadData()" placeholder="Từ khóa...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" (click)="loadData()">Tìm!</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right">
+        <div class="input-group">
+          <button class="btn btn-default" type="button" (click)="reset()">Reset</button>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-3 col-xs-12 form-group pull-right">
+        <div class="input-group">
+          <input type="text" name="endDate" daterangepicker [options]="dateOptions" class="form-control"
+           (selected)="changeEndDate($event)" [(ngModel)]="filterEndDate" placeholder="Đến ngày">
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-3 col-xs-12 form-group pull-right">
+        <div class="input-group">
+          <input type="text" name="startDate" daterangepicker [options]="dateOptions" class="form-control"
+           (selected)="changeStartDate($event)" [(ngModel)]="filterStartDate" placeholder="Từ ngày">
+        </div>
+      </div>
+
+      <div class="col-md-4 col-sm-4 col-xs-12 form-group pull-right">
+        <div class="input-group">
+          <select class="form-control" name="filterPaymentStatus" [(ngModel)]="filterPaymentStatus">
+            <option value="">--Tất cả--</option>
+            <option value="PAID">Đã thanh toán</option>
+            <option value="UNPAID">Chưa thành toán</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>Hóa đơn</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><button class="btn btn-success" *ngIf="_authenService.hasPermission('ORDER','create')" routerLink="/main/order/add">Thêm mới</button></li>
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+              </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <div class="col-md-12">
+            <table *ngIf="orders && orders.length > 0" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Tên khách hàng</th>
+                  <th>Email</th>
+                  <th>Số điện thoại</th>
+                  <td>Ngày tạo</td>
+                  <td>Trạng thái</td>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of orders">
+                  <td>{{item.CustomerName}}</td>
+                  <td>{{item.CustomerEmail}}</td>
+                  <td>{{item.CustomerMobile}}</td>
+                  <td>{{item.CreatedDate | date:'dd - MM - yyyy'}}</td>
+                  <td *ngIf="item.Status==true"> Hợp lệ</td>
+                  <td *ngIf="item.Status==false"> Không hợp lệ</td>
+                  <td>
+                    <button class="btn btn-info" routerLink="/main/order/detail/{{item.ID}}"  tooltip="Chi tiết hóa đơn"
+                      *ngIf="_authenService.hasPermission('ORDER','update')"> <i class="fa fa-info-circle" aria-hidden="true"></i></button>
+                    <button class="btn btn-danger"  tooltip="Xóa sản phẩm" *ngIf="_authenService.hasPermission('ORDER','delete')"
+                      (click)="delete(item.ID)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+            <div class="col-md-12">
+              <div class="col-md-10">
+                <pagination (pageChanged)="pageChanged($event)" [totalItems]="totalRows" [itemsPerPage]="pageSize" [(ngModel)]="pageIndex"
+                  [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (numPages)="numPages = $event"></pagination>
+              </div>
+              <div class="col-md-2">
+                <pre class="card card-block card-header">Trang: {{pageIndex}} / {{numPages}}</pre>
+              </div>
+            </div>
+
+            <div *ngIf="orders && orders.length == 0" class="col-md-12">
+              <div class="alert alert-info">
+                <strong>Thông báo!</strong> Hiện tại chưa có hóa đơn nào trong hệ thống
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

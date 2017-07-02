@@ -1,0 +1,229 @@
+<div class="page-title">
+  <div class="title_left">
+    <h3>Thêm mới</h3>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+  <div class="clearfix"></div>
+  <div class="x_panel">
+    <div class="x_title">
+        <h2>Đơn hàng </h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><button class="btn btn-primary" routerLink="/main/order"> Quay lại</button></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <form class="form-horizontal form-label-left input_mask" novalidate #addEditForm="ngForm" (ngSubmit)="saveChanges(addEditForm.valid)"
+        *ngIf="entity">
+        <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Tên khách hàng</label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <input type="hidden" [(ngModel)]="entity.ID" name="id" />
+            <input type="text" #customerName="ngModel" id="name" [(ngModel)]="entity.CustomerName" required minlength="3" name="customerName"
+              class="form-control">
+            <small [hidden]="customerName.valid || (customerName.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập sản phẩm
+              </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address">Địa chỉ </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <textarea class="form-control" #customerAddress="ngModel" id="address" [(ngModel)]="entity.CustomerAddress" name="customerAddress"
+              rows="3"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email</label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <input type="text" #customerEmail="ngModel" id="email" [(ngModel)]="entity.CustomerEmail" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+              required name="customerEmail" class="form-control">
+            <small [hidden]="customerEmail.valid || (customerEmail.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập email
+              </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Số điện thoại</label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <input type="text" #customerMobile="ngModel" id="phone" [(ngModel)]="entity.CustomerMobile" required name="customerMobile"
+              class="form-control">
+            <small [hidden]="customerMobile.valid || (customerMobile.pristine && !addEditForm.submitted)" class="text-danger">
+                Bạn phải nhập số điện thoại
+              </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="note">Ghi chú khách hàng </label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <textarea class="form-control" #customerMessage="ngModel" id="note" [(ngModel)]="entity.CustomerMessage" name="customerMessage"
+              rows="3"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paymentMethod">Phương thức thanh toán</label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <select class="form-control" #paymentMethod="ngModel" id="paymentMethod" name="paymentMethod" [(ngModel)]="entity.PaymentMethod">
+              <option value="">--Chọn phương thức tahnh toán--</option>
+              <option value="CASH">Tiền mặt</option>
+              <option value="BANKING">Chuyển khoản</option>
+          </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paymentStatus">Trạng thái thanh toán</label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <select class="form-control" #paymentStatus="ngModel" id="paymentStatus" name="paymentStatus" [(ngModel)]="entity.PaymentStatus">
+              <option value="">--Trạng thái--</option>
+              <option value="PAID">Đã thanh toán</option>
+              <option value="UNPAID">Chưa thanh toán</option>
+          </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">Trạng thái</label>
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="checkbox">
+              <label>
+                   <input type="checkbox" id="status" [(ngModel)]="entity.Status" name="status" #status="ngModel"> Hợp lệ
+                </label>
+            </div>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-8 col-sm-8 col-xs-12">
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <button type="button" (click)="showAddDetail()" class="btn btn-success">Thêm chi tiết</button>
+          </div>
+        </div>
+        <table class="table" *ngIf="orderDetails && orderDetails.length > 0">
+          <thead>
+            <tr>
+              <th>
+                Sản phẩm
+              </th>
+              <th>
+                Số lượng
+              </th>
+              <th>Giá</th>
+              <th>Thành tiền</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of orderDetails">
+              <td>
+                {{item.Product.Name}}
+              </td>
+              <td>
+                {{item.Quantity | number}}
+              </td>
+              <td>{{item.Price | number}}</td>
+              <td>{{item.Price * item.Quantity | number}}</td>
+              <td>
+                <button class="btn btn-danger" (click)="deleteDetail(item)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="ln_solid"></div>
+        <div class="form-group">
+          <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+            <button type="submit" class="btn btn-success" [disabled]="!addEditForm.form.valid">Cập nhật</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<div bsModal #addEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Thêm mới chi tiết</h4>
+        <button type="button" class="close pull-right" (click)="addEditModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal form-label-left input_mask" novalidate #detailForm="ngForm" (ngSubmit)="saveOrderDetail(detailForm.valid)"
+          *ngIf="entity">
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="product">Sản phẩm</label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <select class="form-control" name="productID" id="product" #productID="ngModel" required [(ngModel)]="detailEntity.ProductID">
+                 <option value="">--Chọn sản phẩm--</option>
+                  <option *ngFor="let x of products" [value]="x.ID">{{x.Name}}</option>
+                </select>
+              <small [hidden]="productID.valid || (productID.pristine && !detailForm.submitted)" class="text-danger">
+                Bạn phải nhập tên ít nhất 3 ký tự
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="color">Màu sắc</label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <select class="form-control" required #colorId="ngModel" id="color" name="colorId" [(ngModel)]="detailEntity.ColorId">
+                <option value="">--Chọn màu--</option>
+                <option *ngFor="let x of colors" [value]="x.ID">{{x.Name}}</option>
+              </select>
+              <small [hidden]="colorId.valid || (colorId.pristine && !detailForm.submitted)" class="text-danger">
+                Bạn phải chọn màu sắc
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="size">Cỡ</label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <select class="form-control" required #sizeId="ngModel" id="size" name="sizeId" [(ngModel)]="detailEntity.SizeId">
+                <option value="">--Chọn cỡ--</option>
+                <option *ngFor="let x of sizes" [value]="x.ID">{{x.Name}}</option>
+              </select>
+              <small [hidden]="sizeId.valid || (sizeId.pristine && !detailForm.submitted)" class="text-danger">
+                Bạn phải nhập cỡ
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quantity">Số lượng</label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="number" #quantity="ngModel" id="quantity" [(ngModel)]="detailEntity.Quantity" required name="quantity" class="form-control">
+              <small [hidden]="quantity.valid || (quantity.pristine && !detailForm.submitted)" class="text-danger">
+                Bạn phải nhập số lượng
+              </small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="price">Giá tiền</label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="number" #price="ngModel" id="price" [(ngModel)]="detailEntity.Price" required name="price" class="form-control">
+              <small [hidden]="price.valid || (price.pristine && !detailForm.submitted)" class="text-danger">
+                Bạn phải nhập giá tiền
+              </small>
+            </div>
+          </div>
+
+          <div class="ln_solid"></div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+              <button type="button" (click)="addEditModal.hide()" class="btn btn-primary">Hủy bỏ</button>
+              <button type="submit" class="btn btn-success" [disabled]="!detailForm.form.valid">Cập nhật</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
