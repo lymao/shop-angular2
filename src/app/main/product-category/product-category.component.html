@@ -64,7 +64,7 @@
       </div>
       <div class="modal-body">
         <br />
-        <form #addEditForm="ngForm" *ngIf="entity" (ngSubmit)="saveChange(addEditForm.valid)" novalidate data-parsley-validate class="form-horizontal form-label-left">
+        <form #addEditForm="ngForm" *ngIf="entity" (ngSubmit)="saveChange(addEditForm)" novalidate data-parsley-validate class="form-horizontal form-label-left">
           <input type="hidden" [(ngModel)]="entity.ID" name="id" />
 
           <div class="form-group">

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { DataService } from '../../core/services/data.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../core/services/notification.service';
@@ -22,14 +23,14 @@ export class UserComponent implements OnInit {
     private _notificationService: NotificationService,
     private _uploadService: UploadService,
     private _utilityService: UtilityService,
-    public _authenService: AuthenService
+    public _authenService: AuthenService,
   ) {
     if (_authenService.checkAccess('USER') == false) {
       _utilityService.navigateToLogin();
     }
   }
   public pageIndex: number = 1;
-  public pageSize: number = 2;
+  public pageSize: number = 10;
   public filter: string = '';
   public totalRows: number;
   public maxSize: number;
@@ -78,7 +79,7 @@ export class UserComponent implements OnInit {
         this.pageIndex = response.PageIndex;
         this.pageSize = response.PageSize;
         this.maxSize = 2;
-      },error=>{
+      }, error => {
         this._dataService.handleError(error);
       })
   }
@@ -107,8 +108,8 @@ export class UserComponent implements OnInit {
     }, error => this._dataService.handleError(error));
   }
 
-  saveChange(valid: boolean) {
-    if (valid) {
+  saveChange(form: NgForm) {
+    if (form.valid) {
       let fi = this.avatar.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService.postWithFile('/api/upload/saveImage?type=avatar', null, fi.files)
@@ -116,9 +117,11 @@ export class UserComponent implements OnInit {
             this.entity.Avatar = imageUrl;
           }).then(() => {
             this.saveData();
+            form.resetForm();
           })
       } else {
         this.saveData();
+        form.resetForm();
       }
     }
   }

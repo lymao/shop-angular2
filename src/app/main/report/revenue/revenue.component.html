@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-md-6">
+    <div style="display: block;">
+      <canvas baseChart width="400" height="400" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+        [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)"
+        (chartClick)="chartClicked($event)">
+      </canvas>
+    </div>
+  </div>
+  <div class="col-md-6" style="margin-bottom: 10px">
+    <table class="table table-responsive table-condensed">
+      <tr>
+        <th>Ngày</th>
+        <th>Doanh thu</th>
+        <th>Lợi nhuận</th>
+      </tr>
+      <tr *ngFor="let data of tableData">
+        <td>{{data.Date|date:'dd/MM/yyyy'}}</td>
+        <td>{{data.Revenues|number}}</td>
+        <td>{{data.Benefit|number}}</td>
+      </tr>
+    </table>
+    <button (click)="loadData()">Tải lại</button>
+  </div>
+</div>

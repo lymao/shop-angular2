@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SystemConstants } from '../../core/common/system.constants';
 import { DataService } from '../../core/services/data.service';
@@ -114,17 +115,19 @@ export class ProductComponent implements OnInit {
     });
   }
 
-  saveChange(valid) {
-    if (valid) {
+  saveChange(form:NgForm) {
+    if (form.valid) {
       let fi = this.thumbnailImage.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService.postWithFile('/api/upload/saveImage?type=product', null, fi.files).then((response: string) => {
           this.entity.ThumbnailImage = response;
         }).then(() => {
           this.saveData();
+          form.resetForm();
         });
       } else {
         this.saveData();
+        form.resetForm();
       }
     }
   }
@@ -241,11 +244,12 @@ export class ProductComponent implements OnInit {
     }, error => this._dataService.handleError(error));
   }
 
-  saveProductQuantity(isValid: boolean) {
-    if (isValid) {
+  saveProductQuantity(form:NgForm) {
+    if (form.valid) {
       this._dataService.post('/api/productQuantity/add', JSON.stringify(this.quantityEntity)).subscribe((response: any) => {
         this.loadProductQuantities(this.quantityEntity.ProductId);
         this._notificationService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
+        form.resetForm();
       }, error => {
         this._dataService.handleError(error);
       });

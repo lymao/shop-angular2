@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { DataService } from '../../core/services/data.service';
 import { UtilityService } from '../../core/services/utility.service';
 import { UploadService } from '../../core/services/upload.service';
@@ -66,8 +67,8 @@ export class ProductCategoryComponent implements OnInit {
     }, error => { this._dataService.handleError(error) });
   }
 
-  saveChange(valid: boolean) {
-    if (valid) {
+  saveChange(form: NgForm) {
+    if (form.valid) {
       let fi = this.image.nativeElement;
       if (fi.files.length > 0) {
         this._uploadService.postWithFile('/api/upload/saveImage?type=product-category', null, fi.files)
@@ -75,10 +76,12 @@ export class ProductCategoryComponent implements OnInit {
             this.entity.Image = response;
           }).then(() => {
             this.saveData();
+            form.resetForm();
           })
       }
       else {
         this.saveData();
+        form.resetForm();
       }
     }
   }

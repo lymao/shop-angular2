@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { DataService } from '../../core/services/data.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../core/services/notification.service';
@@ -58,12 +59,13 @@ export class RoleComponent implements OnInit {
     this.addEditModal.show();
   }
 
-  saveChange(valid: boolean) {
-    if (valid) {
+  saveChange(form: NgForm) {
+    if (form.valid) {
       if (this.entity.Id == undefined) {
         this._dataService.post('/api/appRole/add', JSON.stringify(this.entity))
           .subscribe((response: any) => {
             this.loadData();
+            form.resetForm();
             this.addEditModal.hide();
             this._notificationService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
           }, error => this._dataService.handleError(error));
@@ -71,6 +73,7 @@ export class RoleComponent implements OnInit {
         this._dataService.put('/api/appRole/update', JSON.stringify(this.entity))
           .subscribe((response: any) => {
             this.loadData();
+            form.resetForm();
             this.addEditModal.hide();
             this._notificationService.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
           }, error => { this._dataService.handleError(error) });

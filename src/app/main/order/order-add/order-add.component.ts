@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DataService } from '../../../core/services/data.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -57,16 +58,12 @@ export class OrderAddComponent implements OnInit {
     }, error => this._dataService.handleError(error));
   }
 
-  saveOrderDetail(valid: boolean) {
-    if (valid) {
+  saveOrderDetail(form: NgForm) {
+    if (form.valid) {
       this.addEditModal.hide();
       this.detailEntity.Product = this.products.find(x => x.ID == this.detailEntity.ProductID);
       this.orderDetails.push(this.detailEntity);
-      this.detailEntity = {
-        ProductID: 0,
-        Quantity: 0,
-        Price: 0
-      };
+      form.resetForm();
     }
   }
 

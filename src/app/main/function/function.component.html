@@ -65,7 +65,7 @@
       </div>
       <div class="modal-body">
         <br />
-        <form #addEditForm="ngForm" *ngIf="entity" (ngSubmit)="saveChange(addEditForm.valid)" novalidate data-parsley-validate class="form-horizontal form-label-left">
+        <form #addEditForm="ngForm" *ngIf="entity" (ngSubmit)="saveChange(addEditForm)" novalidate data-parsley-validate class="form-horizontal form-label-left">
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id"> Mã chức năng </label>
             <div class="col-md-6 col-sm-6 col-xs-12">

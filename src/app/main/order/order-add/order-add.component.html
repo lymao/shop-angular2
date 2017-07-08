@@ -154,7 +154,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal form-label-left input_mask" novalidate #detailForm="ngForm" (ngSubmit)="saveOrderDetail(detailForm.valid)"
+        <form class="form-horizontal form-label-left input_mask" novalidate #detailForm="ngForm" (ngSubmit)="saveOrderDetail(detailForm)"
           *ngIf="entity">
           <div class="form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="product">Sản phẩm</label>

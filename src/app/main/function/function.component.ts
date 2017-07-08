@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TreeComponent } from 'angular-tree-component';
 import { DataService } from '../../core/services/data.service';
@@ -83,12 +84,13 @@ export class FunctionComponent implements OnInit {
     });
   }
 
-  saveChange(valid: boolean) {
-    if (valid) {
+  saveChange(form:NgForm) {
+    if (form.valid) {
       if (this.editFlag == false) {
         this._dataService.post('/api/function/add', JSON.stringify(this.entity)).subscribe((response: any) => {
           this.search();
           this.addEditModal.hide();
+          form.resetForm();
           this._notificationService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
         }, error => {
           this._dataService.handleError(error);
@@ -97,6 +99,7 @@ export class FunctionComponent implements OnInit {
         this._dataService.put('/api/function/update', JSON.stringify(this.entity)).subscribe((response: any) => {
           this.search();
           this.addEditModal.hide();
+          form.resetForm();
           this._notificationService.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
         }, error => {
           this._dataService.handleError(error);
