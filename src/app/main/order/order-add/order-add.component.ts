@@ -63,6 +63,7 @@ export class OrderAddComponent implements OnInit {
       this.addEditModal.hide();
       this.detailEntity.Product = this.products.find(x => x.ID == this.detailEntity.ProductID);
       this.orderDetails.push(this.detailEntity);
+      this.detailEntity = {};
       form.resetForm();
     }
   }

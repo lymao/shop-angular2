@@ -48,7 +48,7 @@ export class OrderDetailComponent implements OnInit {
   public exportToExcel() {
     this._dataService.get('/api/order/exportExcel/' + this.orderId.toString()).subscribe((response: any) => {
       console.log(response);
-      window.open(this.baseFolder + response.Message);
+      window.open(this.baseFolder + response);
     }, error => this._dataService.handleError(error));
   }
 

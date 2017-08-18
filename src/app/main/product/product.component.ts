@@ -247,9 +247,9 @@ export class ProductComponent implements OnInit {
   saveProductQuantity(form:NgForm) {
     if (form.valid) {
       this._dataService.post('/api/productQuantity/add', JSON.stringify(this.quantityEntity)).subscribe((response: any) => {
+        // form.resetForm();
         this.loadProductQuantities(this.quantityEntity.ProductId);
-        this._notificationService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);
-        form.resetForm();
+        this._notificationService.printSuccessMessage(MessageConstants.CREATED_OK_MSG);        
       }, error => {
         this._dataService.handleError(error);
       });

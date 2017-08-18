@@ -1,4 +1,4 @@
-import { Component,AfterViewChecked,ElementRef } from '@angular/core';
+import { Component, AfterViewChecked, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,13 +6,13 @@ import { Component,AfterViewChecked,ElementRef } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewChecked {
-  constructor(private elementRef:ElementRef){
+  constructor(private elementRef: ElementRef) {
 
   }
-  ngAfterViewChecked(){
-    var s=document.createElement("script");
-    s.type="text/javascript";
-    s.src="../assets/js/custom.js";
+  ngAfterViewChecked() {
+    var s = document.createElement("script");
+    s.type = "text/javascript";
+    s.src = "../assets/js/custom.js";
     this.elementRef.nativeElement.appendChild(s);
   }
 }
